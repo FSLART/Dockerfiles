@@ -3,7 +3,8 @@ FROM nvidia/cuda:12.2.2-devel-ubuntu22.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # enable ubuntu universe repository
-RUN apt install software-properties-common
+RUN apt update
+RUN apt install software-properties-common -y
 RUN apt-add-repository universe
 
 # add GPG key
@@ -15,10 +16,10 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/r
 
 # upgrade the system
 RUN apt update
-RUN apt upgrade
+RUN apt upgrade -y
 
 # install ROS
-RUN apt install ros-humble-ros-base
+RUN apt install ros-humble-ros-base -y
 
 # setup environment libraries
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
