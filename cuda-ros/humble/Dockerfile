@@ -24,3 +24,26 @@ RUN apt install ros-humble-ros-base -y
 # setup environment libraries
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 ENV PATH=/usr/local/cuda/bin:$PATH
+
+# install cmake from source
+WORKDIR /temp
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.27.8/cmake-3.27.8.tar.gz
+RUN tar -xvf cmake-3.27.8.tar.gz
+WORKDIR /temp/cmake-3.27.8
+RUN ./bootstrap
+RUN make -j8
+RUN make install
+WORKDIR /home/fslart
+RUN rm -rf /temp
+
+# install lart_common
+WORKDIR /temp
+RUN git clone https://github.com/FSLART/lart_common.git
+WORKDIR /temp/lart_common
+RUN mkdir build
+WORKDIR /temp/lart_common/build
+RUN cmake ..
+RUN make -j8
+RUN make install
+WORKDIR /home/fslart
+RUN rm -rf /temp
