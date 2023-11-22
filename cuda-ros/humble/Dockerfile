@@ -8,7 +8,7 @@ RUN apt install software-properties-common -y
 RUN apt-add-repository universe
 
 # add GPG key
-RUN apt update && apt install curl -y
+RUN apt update && apt install curl libssl-dev libeigen3-dev libcgal-dev -y
 RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 # add repository to sources list
