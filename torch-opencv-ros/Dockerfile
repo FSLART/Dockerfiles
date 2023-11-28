@@ -10,7 +10,8 @@ RUN wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRO
 RUN echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | tee /etc/apt/sources.list.d/oneAPI.list
 RUN apt update
 # install the MKL packages
-RUN apt install intel-oneapi-mkl -y
+RUN apt install intel-oneapi-mkl python3 python3-pip -y
+RUN pip3 install mkl mkl-include
 
 # install libtorch
 WORKDIR /temp
