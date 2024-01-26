@@ -7,7 +7,7 @@ ENV PATH=/usr/local/cuda/bin:$PATH
 # install utilities
 RUN apt update
 RUN apt upgrade -y
-RUN apt install git build-essential wget unzip libssl-dev python3 python3-dev python3-numpy -y
+RUN apt install git build-essential wget unzip libssl-dev python3 python3-dev python3-numpy gdb -y
 
 # install cmake from source
 WORKDIR /temp
