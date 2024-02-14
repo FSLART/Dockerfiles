@@ -7,7 +7,7 @@ ENV PATH=/usr/local/cuda/bin:$PATH
 # install utilities
 RUN apt update
 RUN apt upgrade -y
-RUN apt install git build-essential wget unzip libssl-dev python3 python3-dev python3-numpy gdb -y
+RUN apt install -y --no-install-recommends git build-essential wget unzip libssl-dev python3 python3-dev python3-setuptools python3-wheel python3-pip python3-numpy python3-packaging gdb -y
 
 # install cmake from source
 WORKDIR /temp
@@ -26,9 +26,12 @@ WORKDIR /tmp/onnx
 RUN git clone https://github.com/microsoft/onnxruntime.git --recursive --branch v1.16.3
 WORKDIR /tmp/onnx/onnxruntime
 RUN ./build.sh --config RelWithDebInfo --allow_running_as_root --update --build --build_wheel --use_cuda --cuda_home /usr/local/cuda --cudnn_home /usr/lib/x86_64-linux-gnu --build_shared_lib --build_dir /tmp/onnx/onnxruntime/build --cmake_extra_defines CMAKE_INSTALL_PREFIX=/usr/local --compile_no_warning_as_error --skip_submodule_sync
-RUN pip3 install /tmp/onnx/onnxruntime/build/Linux/RelWithDebInfo/dist/*.whl
 WORKDIR /tmp/onnx/onnxruntime/build/Linux/RelWithDebInfo
 RUN make install
+# install onnx python package
+ENV ONNX_ML=1
+RUN python3 setup.py bdist_wheel
+RUN pip3 install --upgrade /tmp/onnx/onnxruntime/build/Linux/RelWithDebInfo/dist/*.whl
 
 # install opencv
 WORKDIR /tmp/opencv
