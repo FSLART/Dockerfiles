@@ -26,19 +26,15 @@ WORKDIR /tmp/onnx
 RUN git clone https://github.com/microsoft/onnxruntime.git --recursive --branch v1.16.3
 WORKDIR /tmp/onnx/onnxruntime
 RUN ./build.sh --config RelWithDebInfo --allow_running_as_root --update --build --build_wheel --use_cuda --cuda_home /usr/local/cuda --cudnn_home /usr/lib/x86_64-linux-gnu --build_shared_lib --build_dir /tmp/onnx/onnxruntime/build --cmake_extra_defines CMAKE_INSTALL_PREFIX=/usr/local --compile_no_warning_as_error --skip_submodule_sync
-WORKDIR /tmp/onnx/onnxruntime/build/Linux/RelWithDebInfo
-RUN make install
-# install onnx python package
-ENV ONNX_ML=1
-RUN python3 setup.py bdist_wheel
-RUN pip3 install --upgrade /tmp/onnx/onnxruntime/build/Linux/RelWithDebInfo/dist/*.whl
 
-# install opencv
+# install opencv from source with CUDA and cuDNN support
 WORKDIR /tmp/opencv
+# get opencv_contrib
+RUN git clone https://github.com/opencv/opencv_contrib.git
 RUN wget -O opencv.zip https://github.com/opencv/opencv/archive/4.x.zip
 RUN unzip opencv.zip
 WORKDIR /tmp/opencv/opencv-4.x/build
-RUN cmake -DWITH_CUDA=ON -DWITH_CUDNN=ON ..
+RUN cmake -DWITH_CUDA=ON -DWITH_CUDNN=ON -DOPENCV_EXTRA_MODULES_PATH=/tmp/opencv/opencv_contrib/modules ..
 RUN make -j8
 RUN make install
 
@@ -62,7 +58,6 @@ RUN apt upgrade -y
 # install ROS
 RUN apt install ros-humble-ros-base -y
 
-
 # install lart_common
 WORKDIR /temp
 RUN git clone https://github.com/FSLART/lart_common.git
@@ -74,3 +69,4 @@ RUN make -j8
 RUN make install
 WORKDIR /home/fslart
 RUN rm -rf /temp
+
