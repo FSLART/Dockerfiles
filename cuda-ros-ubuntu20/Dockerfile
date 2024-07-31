@@ -47,7 +47,7 @@ COPY ./ros2.repos /ros2_humble/ros2.repos
 RUN vcs import --input ./ros2.repos src
 
 # install dependencies
-RUN apt update && apt upgrade
+RUN apt update && apt upgrade -y
 RUN rosdep init 
 RUN rosdep update
 RUN rosdep install --from-paths src --ignore-src -y --skip-keys "fastcdr rti-connext-dds-6.0.1 urdfdom_headers"
