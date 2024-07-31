@@ -43,8 +43,7 @@ RUN python3 -m pip install -U \
 # clone the ROS2 code
 RUN mkdir -p /ros2_humble/src
 WORKDIR /ros2_humble
-COPY ./ros2.repos /ros2_humble/ros2.repos
-RUN vcs import --input ./ros2.repos src
+RUN vcs import --input https://raw.githubusercontent.com/ros2/ros2/humble/ros2.repos src
 
 # install dependencies
 RUN apt update && apt upgrade -y
