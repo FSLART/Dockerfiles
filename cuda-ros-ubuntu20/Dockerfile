@@ -54,8 +54,4 @@ RUN rosdep install --from-paths src --ignore-src -y --skip-keys "fastcdr rti-con
 # build the ROS2 code
 RUN colcon build --symlink-install
 
-# copy the install to the usual directory
-RUN cp -r /ros2_humble/install /opt/ros/humble
-
-# update the default shell
-SHELL ["/bin/bash", "-c", "source /ros2_humble/install/local_setup.bash", "&&", "exec $0 $@"]
+WORKDIR /ros2_humble
